@@ -13,7 +13,7 @@
 └─ src
 │     └─ main
 │        ├─ java
-│        │  └─ com.github.fireice
+│        │  └─ com.game.foresticefire
 │        │     ├─ GameApp.java        ← JavaFX 启动入口
 │        │     ├─ GameLauncher.java   ← main() 方法
 │        │     ├─ GameController.java ← 全局导演类
