@@ -46,9 +46,10 @@ forest-fireboy-watergirl/
 │       └── SoundManager.java      // 音效管理
 │
 └── resources/
-    ├── maps/                      // 关卡地图文件(JSON/TMX)
-    ├── sounds/                    // 音效
-    └── images/                    // Fireboy, Watergirl, 钻石等贴图
+   ├── maps/                      // 关卡地图文件(JSON/TMX)
+   ├── sounds/                    // 音效
+   └── images/                    // Fireboy, Watergirl, 
+
 
  一、整体架构思路
 
