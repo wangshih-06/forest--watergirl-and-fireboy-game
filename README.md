@@ -1,54 +1,51 @@
-软件应用设计
+
 # 实训项目
 项目名称；森林冰火人游戏
 
-项目分工
-素材资源整合及ui设计：周靖宇
-音效及关卡设计：何承祖
-代码负责人： 马子周 王仕汪 王适涵
-项目优化测试及代码整合：王仕汪
-（每个人可根据项目完成进度合理完成其他工作）
+项目介绍：
+该项目是仿照知名的网页双人闯关游戏森林冰火人而创造，是一款基于 JavaFX 开发的 2D 平台闯关游戏
+游戏中包含经典的双人闯关模式，包括机关，收集等丰富的游戏元素
+开发技术栈：
+Java 21: 现代Java特性支持
+JavaFX : 跨平台GUI框架
+Maven: 项目构建和依赖管理
+FXGL 17.3: 游戏开发框架
+
 
 #项目结构：
-forest-fireboy-watergirl/
-│── src/main/java/com/game/
-│   │── Main.java                  // 程序入口
-│   │
-│   ├── core/
-│   │   ├── GameEngine.java        // 游戏主循环、场景管理
-│   │   ├── GameConfig.java        // 全局常量配置（重力、速度、地图大小等）
-│   │   └── GameController.java    // 游戏控制器（处理事件）
-│   │
-│   ├── model/
-│   │   ├── Character.java         // 抽象角色类（通用移动、跳跃、碰撞）
-│   │   ├── Fireboy.java           // 火人类
-│   │   ├── Watergirl.java         // 冰人类
-│   │   ├── Diamond.java           // 钻石
-│   │   ├── Lever.java             // 拉杆
-│   │   ├── Door.java              // 火门 & 水门
-│   │   └── Platform.java          // 地图中的平台、陷阱
-│   │
-│   ├── events/
-│   │   ├── GameEvent.java         // 游戏事件基类
-│   │   ├── CollisionEvent.java    // 碰撞事件
-│   │   ├── DiamondEvent.java      // 钻石拾取事件
-│   │   ├── LeverEvent.java        // 拉杆事件
-│   │   ├── DoorEvent.java         // 角色进入门事件
-│   │   └── EventListener.java     // 事件监听接口
-│   │
-│   ├── ui/
-│   │   ├── GameView.java          // 渲染游戏场景
-│   │   ├── HUD.java               // 显示得分/剩余时间/提示
-│   │   └── SpriteLoader.java      // 加载 Fireboy/Watergirl 图片
-│   │
-│   └── utils/
-│       ├── CollisionDetector.java // 碰撞检测
-│       └── SoundManager.java      // 音效管理
-│
-└── resources/
-   ├── maps/                      // 关卡地图文件(JSON/TMX)
-   ├── sounds/                    // 音效
-   └── images/                    // Fireboy, Watergirl, 
+src/main/java/com/game/foresticefire/
+├── core/                    # 核心层 - 游戏引擎和控制器
+│   ├── GameEngine.java     # 游戏引擎 - 主循环、状态更新
+│   ├── GameController.java # 游戏控制器 - 输入处理
+│   └── GameConfig.java     # 游戏配置 - 参数管理
+├── events/                  # 事件层 - 观察者模式
+│   ├── EventBus.java       # 事件总线 - 事件分发
+│   ├── GameEventListener.java # 事件监听器接口
+│   ├── GameEvent.java      # 事件基类
+│   ├── CollisionEvent.java # 碰撞事件
+│   ├── DiamondEvent.java   # 钻石拾取事件
+│   ├── LeverEvent.java     # 拉杆事件
+│   └── DoorEvent.java      # 门事件
+├── player/                  # 模型层 - 游戏对象
+│   ├── Player.java         # 角色抽象基类
+│   ├── Fireboy.java        # 火男角色
+│   └── Watergirl.java      # 水女角色
+├── model/                   # 模型层 - 游戏实体
+│   ├── SimpleGameMap.java  # 游戏地图
+│   ├── SimpleTile.java     # 地图瓦片
+│   ├── SimpleDiamond.java  # 钻石对象
+│   ├── SimpleLever.java    # 拉杆对象
+│   └── SimpleDoor.java     # 门对象
+├── ui/                      # 界面层 - 用户界面
+│   ├── GameView.java       # 游戏视图接口
+│   └── SimpleGameView.java # 简单视图实现
+├── utils/                   # 工具层 - 公共服务
+│   ├── CollisionUtils.java # 碰撞检测工具
+│   ├── SoundManager.java   # 音效管理器
+│   └── GameUtils.java      # 游戏工具类
+├── services/                # 服务层 - 业务服务
+│   └── (待实现)
+└── ForestIceFireApplication.java # 主应用程序
 
 
  一、整体架构思路
@@ -130,7 +127,7 @@ CollisionEvent：角色碰撞到物体
 DiamondEvent：角色拾取钻石
 LeverEvent：角色触发拉杆
 DoorEvent：角色进入门
-👉 统一继承 GameEvent，并携带不同的上下文信息（角色、物体）。
+ 统一继承 GameEvent，并携带不同的上下文信息（角色、物体）。
 6. GameController（控制器）
 设计理由：解耦输入事件与角色行为。
 职责：把键盘输入映射到 Fireboy & Watergirl 的行为。
@@ -156,9 +153,27 @@ UI 接口（GameView）：只关心如何渲染，不关心业务逻辑。
 易扩展 → 想增加“开关机关事件”或“陷阱事件”，只需增加一个新事件类。
 多监听器支持 → UI、音效、分数统计模块都能订阅同一个事件。
 
- 
-第一天工作概要：
-1.搜索资源
-2.设计音效
-3.配置相关环境
-4.完善项目结构及对应的接口
+
+##模块定义：
+1. 模块声明
+定义模块名为 com.game.foresticefire
+遵循 Java 模块系统的命名规范
+2. 依赖声明 (requires)
+JavaFX 核心模块
+第三方库依赖
+3. 导出和开放声明
+开放包给 JavaFX
+允许 JavaFX FXML 访问包内的类
+支持反射和依赖注入
+导出包
+导出主包供其他模块使用
+提供公共 API 接口
+
+## 参与贡献的开发者
+ 项目分工
+素材资源整合及ui设计：周靖宇
+音效及关卡设计：何承祖
+代码负责人： 马子周 王仕汪 王适涵
+项目优化测试及代码整合：王仕汪
+（每个人可根据项目完成进度合理完成其他工作）
+
